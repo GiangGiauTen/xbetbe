@@ -10,14 +10,14 @@ router.get('/friendships', async (req,res)=> {
 // Gửi lời mời kết bạn
 router.post('/friendships/send-request', async (req, res) => {
   try {
-    const { userId, friendId } = req.body;
-    const existingRequest = await FriendShip.findOne({ user: userId, friend: friendId });
+    const { userId, friendId } = req.body;  
+    const existingRequest = await FriendShip.findOne({ user: friendId, friend: userId });
 
     if (existingRequest) {
       return res.status(400).json({ error: 'Friend request already sent' });
     }
 
-    const friendship = new FriendShip({ user: userId, friend: friendId });
+    const friendship = new FriendShip({ user: friendId, friend: userId });
     await friendship.save();
 
     res.json({ message: 'Friend request sent' });
